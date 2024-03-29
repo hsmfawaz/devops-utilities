@@ -23,7 +23,7 @@ else
   fi
 fi
 
-if [ "${APP_HORIZON}" = "horizon" ]; then
+if [ "${APP_QUEUE}" = "horizon" ]; then
   echo ""
   echo "[LOG] Starting Horizon..."
   echo ""
