@@ -2,8 +2,7 @@ ARG PHP_VERSION=8.2
 FROM webdevops/php:${PHP_VERSION} as base
 
 WORKDIR /app
-ENV APP_SCHEDULE=false
-# supervisor || horizon
+ENV APP_SCHEDULE="false"
 ENV APP_QUEUE=""
 ENV APP_QUEUE_WORKERS=1
 
