@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-chown -R application:application "${WEB_DOCUMENT_ROOT}"/../
+chown -R application:application /app
 
 if [ "${APP_QUEUE}" = "supervisor" ]; then
 
@@ -41,28 +41,6 @@ else
   fi
 fi
 
-
-
-if [ "${APP_DOMAIN}" != "" ] && [ ! -e "/usr/local/share/ca-certificates/server_ng.crt" ]; then
-  echo ""
-  echo "[LOG] Generating local ssl file..."
-  echo ""
-  openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
-    -subj "/C=EG/ST=QC/O=Codebase, Inc./CN=${APP_DOMAIN}" \
-    -addext "subjectAltName=DNS:${APP_DOMAIN},DNS:*.${APP_DOMAIN}" \
-    -keyout /etc/ssl/private/server.key \
-    -out /etc/ssl/certs/server.crt
-
-  chmod 777 /etc/ssl/private/server.key /etc/ssl/certs/server.crt
-
-  rm -f /opt/docker/etc/nginx/ssl/server.crt /opt/docker/etc/nginx/ssl/server.key
-
-  ln -s /etc/ssl/certs/server.crt /opt/docker/etc/nginx/ssl/server.crt
-  ln -s /etc/ssl/private/server.key /opt/docker/etc/nginx/ssl/server.key
-  cp /etc/ssl/certs/server.crt /usr/local/share/ca-certificates/server_ng.crt
-  update-ca-certificates
-fi
-
 if [ "${APP_SCHEDULE}" = "true" ]; then
   echo ""
   echo "[LOG] Starting Cronjob..."
@@ -74,4 +52,14 @@ else
   echo "[LOG] Clearing Cronjob..."
   echo ""
   echo -n "" >  etc/cron.d/webdevops-docker
+fi
+
+#check if vendor folder exists and composer.json exists
+if [ ! -d /app/vendor ] && [ -f /app/composer.json ]; then
+  echo ""
+  echo "[LOG] Running Composer Install..."
+  echo ""
+  composer install --no-interaction --no-progress --no-suggest || echo "Composer install failed"
+  php artisan key:generate || echo "Key generation failed"
+  php artisan storage:link || echo "Storage link failed"
 fi
