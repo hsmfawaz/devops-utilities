@@ -1,5 +1,5 @@
 ARG PHP_VERSION=8.2
-FROM webdevops/php:${PHP_VERSION}-alpine as base
+FROM webdevops/php:${PHP_VERSION} as base
 
 WORKDIR /app
 ENV APP_SCHEDULE=false
