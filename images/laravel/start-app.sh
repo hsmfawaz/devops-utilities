@@ -61,4 +61,5 @@ if [ ! -d /app/vendor ] && [ -f /app/composer.json ]; then
   composer install --no-interaction --no-progress --no-suggest || echo "Composer install failed"
   php artisan key:generate || echo "Key generation failed"
   php artisan storage:link || echo "Storage link failed"
+  git config --global --add safe.directory /app
 fi
