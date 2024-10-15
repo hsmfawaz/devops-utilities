@@ -1,0 +1,71 @@
+services:
+  app:
+    container_name: "app"
+    image: "hsmfawaz/laravel:83"
+    environment:
+      - APP_SCHEDULE=true
+      - APP_QUEUE=supervisor
+    volumes:
+      - "./src:/app"
+    networks:
+      - appnw
+    restart: unless-stopped
+  mysql:
+    image: 'mysql/mysql-server:5.7.41'
+    container_name: infra-mysql
+    restart: on-failure
+    command: --max_allowed_packet=32505856
+    environment:
+      MYSQL_ROOT_PASSWORD: 'B556000k2WOD'
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - './data/mysql:/var/lib/mysql'
+    networks:
+      - appnw
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-pB556000k2WOD" ]
+      retries: 3
+      timeout: 5s
+  memcached:
+    image: 'memcached:alpine'
+    container_name: infra-memcached
+    restart: always
+    networks:
+      - appnw
+
+  caddy:
+    container_name: "caddy"
+    image: caddy
+    restart: unless-stopped
+    networks:
+      - appnw
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - caddy_certs:/root/.caddy
+      - ./logs:/srv/logs
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./src:/app
+    ports:
+      - 80:80
+      - 443:443
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: infra-phpmyadmin
+    restart: always
+    environment:
+      - PMA_HOST=infra-mysql
+      - UPLOAD_LIMIT=1G
+      - MAX_EXECUTION_TIME=3600
+    networks:
+      - appnw
+
+networks:
+  sptnw:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  caddy_certs:
