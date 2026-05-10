@@ -13,12 +13,11 @@ ENV PHP_OPCACHE_ENABLE=1 \
     QUEUE_WORKERS=1 \
     QUEUE_COMMAND="php /var/www/html/artisan queue:work --sleep=3 --tries=2 --max-time=3600"
 
-# # Removed zip, pdo_mysql, pdo_pgsql, redis as they are already in the base image
-# RUN install-php-extensions \
-#     gd \
-#     intl \
-#     bcmath \
-#     exif 
+RUN install-php-extensions \
+    gd \
+    intl \
+    bcmath \
+    exif 
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
