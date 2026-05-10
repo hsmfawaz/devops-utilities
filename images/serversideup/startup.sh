@@ -41,7 +41,7 @@ fi
 
 
 
-if [ ! -d /app/vendor ] && [ -f /app/composer.json ]; then
+if [ ! -d /var/www/html/vendor ] && [ -f /var/www/html/composer.json ]; then
   echo ""
   echo "[LOG] Running Composer Install..."
   echo ""
