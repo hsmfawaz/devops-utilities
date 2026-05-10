@@ -5,7 +5,7 @@ echo "Running startup script..."
 cd /var/www/html
 
 
-if [ "${ENABLE_SCHEDULER}" == "true" ]; then
+if [ "${ENABLE_SCHEDULER}" = true ]; then
   echo ""
   echo "[LOG] Starting Scheduler..."
   echo ""
@@ -19,10 +19,11 @@ fi
 
 
 
-if [ "${ENABLE_QUEUE}" == "true" ]; then
+if [ "${ENABLE_QUEUE}" = true ]; then
   echo ""
   echo "[LOG] Starting Queue..."
   echo ""
+  mkdir -p /var/www/html/storage/logs
   cp /etc/supervisor/conf.d/queue.x /etc/supervisor/conf.d/queue.conf
   if [ -z "${QUEUE_WORKERS}" ]; then
     QUEUE_WORKERS=1
@@ -48,5 +49,5 @@ if [ ! -d /var/www/html/vendor ] && [ -f /var/www/html/composer.json ]; then
   composer install --no-interaction --no-progress --no-suggest || echo "Composer install failed"
   php artisan key:generate || echo "Key generation failed"
   php artisan storage:link || echo "Storage link failed"
-  git config --global --add safe.directory /app 2>> /dev/null || echo "Git config failed"
+  git config --global --add safe.directory /var/www/html 2>> /dev/null || echo "Git config failed"
 fi
