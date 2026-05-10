@@ -63,3 +63,6 @@ if [ ! -d /app/vendor ] && [ -f /app/composer.json ]; then
   php artisan storage:link || echo "Storage link failed"
   git config --global --add safe.directory /app
 fi
+
+# fix permissions
+docker-php-serversideup-set-file-permissions --owner 1000:1000
