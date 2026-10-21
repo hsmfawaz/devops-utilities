@@ -64,5 +64,3 @@ if [ ! -d /app/vendor ] && [ -f /app/composer.json ]; then
   git config --global --add safe.directory /app
 fi
 
-# fix permissions
-docker-php-serversideup-set-file-permissions --owner 1000:1000
