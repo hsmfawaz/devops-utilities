@@ -10,14 +10,14 @@ if [ "${APP_QUEUE}" == "supervisor" ]; then
     mv /opt/docker/etc/supervisor.d/app-queue-worker.conf.x /opt/docker/etc/supervisor.d/app-queue-worker.conf
     # set the queue worker to ${APP_QUEUE_WORKERS}
     sed -i~ "/^numprocs=/s/=.*/=${APP_QUEUE_WORKERS}/" /opt/docker/etc/supervisor.d/app-queue-worker.conf
-    supervisorctl start app-worker
+    supervisorctl start app-worker || true
   fi
 else
   if [[ -e "/opt/docker/etc/supervisor.d/app-queue-worker.conf" ]]; then
     echo ""
     echo "[LOG] Stopping App Queue..."
     echo ""
-    supervisorctl stop app-worker
+    supervisorctl stop app-worker || true
     mv /opt/docker/etc/supervisor.d/app-queue-worker.conf /opt/docker/etc/supervisor.d/app-queue-worker.conf.x
   fi
 fi
@@ -29,13 +29,13 @@ if [ "${APP_QUEUE}" == "horizon" ]; then
     echo ""
     mv /opt/docker/etc/supervisor.d/app-horizon.conf.x /opt/docker/etc/supervisor.d/app-horizon.conf
   fi
-  supervisorctl start app-horizon
+  supervisorctl start app-horizon || true
 else
   if [[ -e "/opt/docker/etc/supervisor.d/app-horizon.conf" ]]; then
     echo ""
     echo "[LOG] Stopping Horizon..."
     echo ""
-    supervisorctl stop app-horizon
+    supervisorctl stop app-horizon || true
     mv /opt/docker/etc/supervisor.d/app-horizon.conf /opt/docker/etc/supervisor.d/app-horizon.conf.x
   fi
 fi
