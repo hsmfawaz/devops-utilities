@@ -1,7 +1,7 @@
 services:
   app:
     container_name: "app"
-    image: "hsmfawaz/laravel:83"
+    image: "hsmfawaz/laravel:85"
     environment:
       - APP_SCHEDULE=true
       - APP_QUEUE=supervisor

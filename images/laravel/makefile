@@ -7,3 +7,5 @@ build:
 	docker push hsmfawaz/laravel:83
 	docker build --pull . -t hsmfawaz/laravel:80 --build-arg="PHP_VERSION=8.0"
 	docker push hsmfawaz/laravel:80
+	docker build --pull . -t hsmfawaz/laravel:85 --build-arg="PHP_VERSION=8.5"
+	docker push hsmfawaz/laravel:85
